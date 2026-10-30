@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotion Detector</title>
+</head>
+<body>
+    <h1>Emotion Detector</h1>
+
+    <form id="emotion-form">
+        <label for="text">Enter text:</label>
+        <input type="text" id="text" required>
+        <button type="submit">Analyze</button>
+    </form>
+
+    <p id="result"></p>
+
+    <script>
+        document.getElementById("emotion-form").addEventListener(
+            "submit", async function(event) {
+                event.preventDefault();
+
+                const text = document.getElementById("text").value.trim();
+                const result = document.getElementById("result");
+
+                if (!text) {
+                    result.textContent = "Please enter a text to analyze.";
+                    return;
+                }
+
+                result.textContent = "Analyzing...";
+
+                try {
+                    const response = await fetch(
+                        "/emotionDetector?text=" + encodeURIComponent(text)
+                    );
+                    result.textContent = await response.text();
+                } catch (error) {
+                    result.textContent = "Unable to connect to the server.";
+                }
+            }
+        );
+    </script>
+</body>
+</html>
